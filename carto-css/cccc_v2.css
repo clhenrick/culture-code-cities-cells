@@ -1,0 +1,183 @@
+/* land variable*/
+@land: 1200000;
+
+/* map background color */
+/*@map_bg: hsl(200, 50%, 95%);*/
+@map_bg: #FFF;
+
+/* coastline color*/
+@coastline: hsl(240, 50%, 90%);
+
+/* voroni admin line colors */
+@voronoi_admin0: hsl(0,0%,85%);
+@voronoi_admin1: hsl(0,0%,90%);//hsl(35,60%,80%);
+@voronoi_admin2: hsl(270,50%,70%);
+
+/* flickr shapes polygon fills */
+@flickr_continent_fill: hsl(50, 80%, 95%);
+@flickr_region_fill: hsl(35, 100%, 70%);
+@flickr_admin0_fill: hsl(60, 100%, 70%);
+
+/* natural earth */
+@ne_urban: hsl(30, 60%, 65%);
+@ne_coastline: hsl(340, 50%, 90%);
+
+Map {
+  background-color: @map_bg;
+}
+
+/*** voronoi lines ***/
+
+#geoplanetvoronoiadm0 {
+  line-color:@voronoi_admin0;
+  line-width: 0.7;
+//  line-comp-op: overlay;
+  //line-opacity: 0.2;
+  polygon-opacity:0;
+  polygon-fill:#59dba5;
+  [zoom>=3]{
+    line-width: 1;
+  }
+}
+
+
+#geoplanetvoronoiadm1 [zoom>2] {
+  line-color:@voronoi_admin1;
+  line-width:0.5;
+  line-dasharray: 10, 10;
+//  line-comp-op: overlay;
+  polygon-opacity:0;
+  polygon-fill:#ae8;
+}
+
+
+#geoplanetvoronoiadm2 {
+  line-color: @voronoi_admin2;
+  line-width:0.1;
+  polygon-opacity:0;
+  polygon-fill:#ae8;
+}
+
+/*** flickr alpha shapes ***/
+
+#flickrshapescontinen {
+  line-color:darken(@flickr_continent_fill, 5%);
+  line-width:12.3;
+  line-join: round;
+  line-offset: -3;
+//  line-comp-op: overlay;
+  polygon-opacity:1;
+//  comp-op: color;
+  polygon-fill: @flickr_continent_fill;
+}
+
+
+#flickrshapesregions {
+  line-color:#594;
+  line-width:0;
+  polygon-opacity:0.5;
+  polygon-fill:@flickr_region_fill;
+}
+
+
+#flickrshapescountrie {
+  line-color:#594;
+  line-width:0;
+  polygon-opacity:0.4;
+  polygon-fill:@flickr_admin0_fill;
+}
+
+/*** natural earth ***/
+
+#ne50mcoastline {
+  line-width:1;
+  line-color:@ne_coastline;
+}
+
+#ne50murbanareas {
+  [zoom >=1][area_sqkm > 10000] {
+    polygon-opacity:0.5;
+    polygon-fill: @ne_urban;
+  }
+  [zoom > 2]{
+    line-color:#594;
+    line-width:0;
+    polygon-opacity:0.5;
+    polygon-fill: @ne_urban;
+  }
+}
+
+/* project line work sea hexes*/
+
+#pl-seahexes {
+  line-color:darken(@map_bg, 17%);
+  line-width:0.2;
+  //line-opacity: 0.2;
+//  line-comp-op: color-dodge;
+  polygon-opacity:0;
+  polygon-fill:#ae8;
+}
+
+
+#pl-sea {
+  line-color:#594;
+  line-width:0;
+  polygon-comp-op: screen;
+  polygon-opacity:1;
+  polygon-fill:@map_bg;
+}
+
+/* coastline */
+
+#ne50mland [area>1200000] {
+  line-width:0.3;
+  line-color:darken(@coastline, 3%);
+  line-join: round;
+  line-cap: round;
+}
+
+#ne50mland::outline2[area>1200000]{
+  [zoom >=3]{
+      line-offset:1;
+      line-color:darken(@coastline, 2%);
+      line-width:0.3;
+      line-join: round;    
+  }
+  [zoom >3]{
+    line-offset:2;
+  }
+  [zoom >4]{
+    line-offset:3;
+  }
+}
+
+#ne50mland::outline3[area>1200000] {    
+  [zoom >=3]{
+      line-color:darken(@coastline, 1%);
+      line-width:0.3;
+      line-join: round;
+      line-offset:2;
+  }
+  [zoom >3]{
+    line-offset:3;
+  }
+  [zoom >4]{
+    line-offset:5;
+  }  
+}
+
+#ne50mland::outline4[area>1200000] {    
+  [zoom >=3]{
+      line-color:@coastline;
+      line-width:0.3;
+      line-join: round;
+      line-offset: 3;    
+  }
+  [zoom >3]{
+    line-offset:5;
+  }
+  [zoom >4]{
+    line-offset:9 ;
+  }  
+}
+

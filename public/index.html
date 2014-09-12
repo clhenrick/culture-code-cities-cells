@@ -1,0 +1,156 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset=utf-8 />
+      <title>Leaflet, Mapbox and D3JS test</title>
+      <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+      
+      <script src='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js'></script>
+      <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
+      <link href='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.css' rel='stylesheet' />
+      <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+        
+      <style>
+        
+        html, body { 
+          margin:0;
+          padding:0; 
+        }
+        
+        #map { 
+          width: 1200px;
+          height: 800px;
+          margin: 50px auto;
+        }
+
+        .info {
+          padding: 6px 8px;
+          font: 14px/16px "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+          background: white;
+          background: rgba(255,255,255,0.8);
+          border: 1px solid hsl(0, 0%, 60%);
+          box-shadow: 0 0 15px rgba(0,0,0,0.2);
+          border-radius: 5px;
+        }
+
+        .info h4 {
+          margin: 0 0 5px;
+          color: #777;
+        }
+
+      </style>
+    </head>
+    <body>
+      <div id='map'></div>
+      <script>
+
+      /********************************************************
+        MapBox JS code credit: 
+        https://www.mapbox.com/mapbox.js/example/v1.0.0/plain-leaflet/  
+      ********************************************************/
+
+      var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/chenrick.2yj2x1or/{z}/{x}/{y}.png');
+
+      var params = {
+        center: [0,0],
+        minZoom: 2, 
+        maxZoom: 4,
+        zoom: 3       
+      };
+
+      var map = L.map('map', params)
+          .addLayer(mapboxTiles);
+
+      /********************************************************
+        CartoDB code credit: http://docs.cartodb.com/tutorials/create_map_cartodbjs.html
+      ********************************************************/
+
+      var CbdLayerUrl = "http://chenrick.cartodb.com/api/v2/viz/f8014f6c-343f-11e4-a181-0e230854a1cb/viz.json";
+
+      cartodb.createLayer(map, CbdLayerUrl)
+      .addTo(map)
+      .on('done', function(layer) {
+    
+      })
+      .on('error', function(err) {
+        alert("some error occurred: " + err);
+      });
+
+      init();
+
+      function init() {
+
+        var info = L.control();
+
+        info.onAdd = function (map) {
+          this._div = L.DomUtil.create('div', 'info');
+          this.update();
+          return this._div;
+        };
+
+        info.update = function (props) {
+          this._div.innerHTML = '<h4>Time Zone</h4>' +  (props ?
+            '<b>' + props.time_zone + '</b><br>' +
+            '<b>' + props.tz_name1st + '</b><br>' + props.places + ''
+            : 'Hover over a timezone');
+        };
+
+        info.addTo(map);
+
+        var timeZones;
+
+        function highLightFeature(e) {
+          var layer = e.target;
+
+          layer.setStyle({
+            fill: true,
+            fillOpacity: 0.3,
+            fillColor: '#60FFBE'
+          });
+
+          if (!L.Browser.ie && !L.Browser.opera) {
+              layer.bringToFront();
+          }
+
+          info.update(layer.feature.properties);
+
+        }
+
+        function resetHighlight(e) {
+            timeZones.resetStyle(e.target);
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+              mouseover: highLightFeature,
+              mouseout: resetHighlight,
+              click: zoomToFeature              
+            });
+        }        
+
+        function zoomToFeature(e) {
+          map.fitBounds(e.target.getBounds());
+        }
+
+        var style = {          
+            color: "#60FFBE",
+            weight: 1,
+            opacity: 0.8,
+            fillOpacity: 0                       
+        };
+
+        $.getJSON("data/ne_10m_time_zones.json", function(data){
+
+          console.log('data: ', data);
+
+          timeZones = L.geoJson(data, {
+              style: style,
+              onEachFeature: onEachFeature              
+            }).addTo(map);              
+          });
+
+      }
+
+      </script>
+    </body>
+  </html>
