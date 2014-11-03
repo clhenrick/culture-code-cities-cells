@@ -8,7 +8,7 @@ html, body {
   margin:0;
   padding:0; 
   font-size: 10px;
-  font: 14px/16px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
 }
 
@@ -48,12 +48,12 @@ h1 {
   width: 1200px;  
   margin: 0 auto 2em auto;
   padding: 0 100px;
-  font-size: 1.6em;
-  line-height: 1.4em;
+  font-size: 1.8em;
+  line-height: 1.6em;
 }
 
 #about p {
-  margin-bottom: 20px;
+  margin-bottom: 1.6em;
 }
 
 #about p a {
