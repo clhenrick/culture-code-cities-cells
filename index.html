@@ -9,148 +9,31 @@
       <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
       <link href='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.css' rel='stylesheet' />
       <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
-        
-      <style>
-        
-        html, body { 
-          margin:0;
-          padding:0; 
-        }
-        
-        #map { 
-          width: 1200px;
-          height: 800px;
-          margin: 50px auto;
-        }
-
-        .info {
-          padding: 6px 8px;
-          font: 14px/16px "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
-          background: white;
-          background: rgba(255,255,255,0.8);
-          border: 1px solid hsl(0, 0%, 60%);
-          box-shadow: 0 0 15px rgba(0,0,0,0.2);
-          border-radius: 5px;
-        }
-
-        .info h4 {
-          margin: 0 0 5px;
-          color: #777;
-        }
-
-      </style>
+      <link rel="stylesheet" type="text/css" href="css/styles.css">
     </head>
     <body>
+      <h1>Culture - Code - Cities - Cells</h1>
       <div id='map'></div>
-      <script>
-
-      /********************************************************
-        MapBox JS code credit: 
-        https://www.mapbox.com/mapbox.js/example/v1.0.0/plain-leaflet/  
-      ********************************************************/
-
-      var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/chenrick.xx6tuik9/{z}/{x}/{y}.png');
-
-      var params = {
-        center: [0,0],
-        minZoom: 0, 
-        maxZoom: 5,
-        zoom: 3       
-      };
-
-      var map = L.map('map', params)
-          .addLayer(mapboxTiles);
-
-      /********************************************************
-        CartoDB code credit: http://docs.cartodb.com/tutorials/create_map_cartodbjs.html
-      ********************************************************/
-
-      var CbdLayerUrl = "http://chenrick.cartodb.com/api/v2/viz/f8014f6c-343f-11e4-a181-0e230854a1cb/viz.json";
-
-      cartodb.createLayer(map, CbdLayerUrl)
-      .addTo(map)
-      .on('done', function(layer) {
-    
-      })
-      .on('error', function(err) {
-        alert("some error occurred: " + err);
-      });
-
-      init();
-
-      function init() {
-
-        var info = L.control();
-
-        info.onAdd = function (map) {
-          this._div = L.DomUtil.create('div', 'info');
-          this.update();
-          return this._div;
-        };
-
-        info.update = function (props) {
-          this._div.innerHTML = '<h4>Time Zone</h4>' +  (props ?
-            '<b>' + props.time_zone + '</b><br>' +
-            '<b>' + props.tz_name1st + '</b><br>' + props.places + ''
-            : 'Hover over a timezone');
-        };
-
-        info.addTo(map);
-
-        var timeZones;
-
-        function highLightFeature(e) {
-          var layer = e.target;
-
-          layer.setStyle({
-            fill: true,
-            fillOpacity: 0.5,
-            fillColor: '#60FFBE'
-          });
-
-          if (!L.Browser.ie && !L.Browser.opera) {
-              layer.bringToFront();
-          }
-
-          info.update(layer.feature.properties);
-
-        }
-
-        function resetHighlight(e) {
-            timeZones.resetStyle(e.target);
-        }
-
-        function onEachFeature(feature, layer) {
-            layer.on({
-              mouseover: highLightFeature,
-              mouseout: resetHighlight,
-              click: zoomToFeature              
-            });
-        }        
-
-        function zoomToFeature(e) {
-          map.fitBounds(e.target.getBounds());
-        }
-
-        var style = {          
-            color: "#60FFBE",
-            weight: 0,
-            opacity: 0.8,
-            fillOpacity: 0                       
-        };
-
-        $.getJSON("data/ne_10m_time_zones.json", function(data){
-
-          console.log('data: ', data);
-
-          timeZones = L.geoJson(data, {
-              style: style,
-              onEachFeature: onEachFeature              
-            }).addTo(map);              
-          });
-
-      }
-
-      </script>
+      <div id='about'>
+        <p>
+          In the last several decades cultural production has shifted from being shaped primarily by geographically separate places to a world that has become continually influenced by interconnected networks. The pivotal factor being that mobile devices and the web now mediate how many people experience their lives. In response, the data generated from these devices and shared across the web are informing how users of the technology view the world from their constant connectivity to email, social media and instant messaging. Thus we may choose to work from about any location at any time. We learn about events as they are unfolding. Time is now experienced in milliseconds rather than large hourly blocks (what's on my Twitter feed vs. how has the news progressed since last evening?)
+        </p>
+        <p>
+          In this map the shape of the continents has been created from geotagged photos on Flickr. Nations and states / provinces are shown as Voronoi cells, also generated from Flickr user data (in a given place do Flickr users think it's administrative area A or B?) Ten minutes of geotagged tweets collected on September 4th are shown in their temporal sequence that contrast with standard time zones which highlight on a mouseover. This map is an attempt to ask if we should rethink how we define time and place. Just as time was standardized following the advent of telecommunications and the rail roads, our computerized networks suggest the future of time is not what it used to be.
+        </p>
+        <p>
+          Culture Code Cities Cells is an attempt to provoke audiences to think about how the meaning of time and space in our contemporary era are changing due to our increasingly intimate relationship with technology. It argues that our experience of time has continuously been shortening as technology has progressed. Simultaneously, the way we define place and create culture is no longer limited to local geographies. As urban areas have increasingly become congregations for the majority of the world's population, (over 50% of earth's inhabitants live within in an urban area and this number is continuing to grow) and as cities have always been places of cultural production that are influenced by their citizens; the way in which ideas spread and influence individuals and groups is happening at a much faster rate then ever before. With the internet, users are no longer limited by consuming static media in a one way relationship but instead engage in reciprocal methods through blogs, video, live journals, personal websites and social media. In this sense, the future is no longer what it used to be.
+        </p>
+        <p>
+          Anyone with access to a computer and the web now are able to contribute back to their sources of inspiration through tools such as Github and create cultural artifacts using open-source technology, open data and media licensed under the Creative Commons. The growth in free and accessible data, software and media is also shaping the way in which we define geographic space. This map's creation was through open-source tools and open data, some of which was created from social media. It is a manifesto advocating for these new technologies and data sources to be considered as a bottom up response to the traditional top down approaches taken by map makers and GIS professionals, based on my own <a href="http://chenrickmfadt.wordpress.com/manifesto/">manifesto.</a>
+        </p>
+        <p>
+          Will time zones continue to be relevant in the future? Will the way in which we experience time become something completely abstract from solar time? Or will we come to use a third type of time different from both solar and standard time? Technology appears to be leading us in this direction and questioning the relevance of our human experience of time. Similarly, in regards to place, will boundaries of areas such as neighborhoods or even cities, states and nations become determined by data streaming from devices being used by people located within them? Or will these boundaries become less clearly defined and more fuzzy? Will maps then have to show separate boundaries for each level of geography; one for official government boundaries and another set that have been generated by locals? Will new types of geographies come into existence? These are questions that this map intends to evoke for debate among its viewers. Perhaps only a prototype for such weighted ideas, Culture Code Cities Cells could become an evolving map that branches out beyond traditional cartographies to redefine our concept of space and time as they continue to evolve with technology.
+        </p>
+        <p>
+          <span>- Chris Henrick</span>
+        </p>
+      </div>
+      <script src="js/main.js"></script>
     </body>
   </html>
